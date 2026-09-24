@@ -1,0 +1,7 @@
+{
+  "defaultCriticality": "medium",
+  "assets": [
+    { "match": "sample-app:1.0.0*", "criticality": "critical" },
+    { "match": "legacy-app:2.1.0*", "criticality": "low" }
+  ]
+}

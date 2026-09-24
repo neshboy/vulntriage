@@ -1,0 +1,54 @@
+{
+  "matches": [
+    {
+      "vulnerability": {
+        "id": "CVE-2019-0708",
+        "severity": "Critical",
+        "description": "A remote code execution vulnerability exists in Remote Desktop Services (BlueKeep). Real, CISA KEV-listed.",
+        "cvss": [
+          { "version": "3.1", "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", "metrics": { "baseScore": 9.8 }, "source": "nvd" }
+        ],
+        "fix": { "versions": [], "state": "not-fixed" }
+      },
+      "artifact": { "name": "rdp-service", "version": "1.2.3", "type": "binary" }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2023-0157",
+        "severity": "High",
+        "description": "A real, non-KEV vulnerability with moderate EPSS score, used here for fixture variety.",
+        "cvss": [
+          { "version": "3.1", "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", "metrics": { "baseScore": 7.5 }, "source": "nvd" }
+        ],
+        "fix": { "versions": ["1.1.1u-r0"], "state": "fixed" }
+      },
+      "artifact": { "name": "openssl", "version": "1.1.1t-r0", "type": "apk" }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-0001",
+        "severity": "Low",
+        "description": "A real, non-KEV vulnerability with a very low real EPSS score.",
+        "cvss": [
+          { "version": "3.1", "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", "metrics": { "baseScore": 3.1 }, "source": "nvd" }
+        ],
+        "fix": { "versions": ["1.2.14"], "state": "fixed" }
+      },
+      "artifact": { "name": "zlib", "version": "1.2.13", "type": "apk" }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-9999-0002",
+        "severity": "Negligible",
+        "description": "Fixture-only placeholder CVE (year 9999) with no EPSS record, used to test the Negligible->UNKNOWN severity mapping and the 'missing data' path.",
+        "cvss": [],
+        "fix": { "versions": [], "state": "unknown" }
+      },
+      "artifact": { "name": "busybox", "version": "1.36.1-r0", "type": "apk" }
+    }
+  ],
+  "source": {
+    "type": "image",
+    "target": { "userInput": "legacy-app:2.1.0" }
+  }
+}
