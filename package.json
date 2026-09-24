@@ -1,0 +1,48 @@
+{
+  "name": "vulntriage",
+  "version": "0.1.0",
+  "description": "Self-hosted, deterministic vulnerability-triage correlation layer: merges scanner findings (Trivy/Grype) with real EPSS exploit-probability scores and the real CISA KEV catalog plus your asset-criticality tags into one explainable ranked list.",
+  "keywords": [
+    "vulnerability-management",
+    "epss",
+    "cisa-kev",
+    "trivy",
+    "grype",
+    "security",
+    "vulnerability-scanning",
+    "triage"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "bin": {
+    "vulntriage": "./bin/vulntriage.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:live": "vitest run --config vitest.live.config.ts",
+    "typecheck": "tsc -p tsconfig.typecheck.json",
+    "cli": "tsx src/cli/index.ts"
+  },
+  "dependencies": {
+    "commander": "^15.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  }
+}
