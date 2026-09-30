@@ -1,13 +1,29 @@
 import { describe, expect, it } from 'vitest';
+import type { KevEntry } from '../types.js';
 import {
   ASSET_WEIGHT,
   EPSS_WEIGHT,
   KEV_WEIGHT,
   SEVERITY_WEIGHT,
+  isKevListed,
   normalizeAssetCriticality,
   normalizeSeverity,
   scoreFinding,
 } from './score.js';
+
+function kevEntry(cveID: string): KevEntry {
+  return {
+    cveID,
+    vendorProject: 'Acme',
+    product: 'Widget',
+    vulnerabilityName: 'Example vulnerability',
+    dateAdded: '2024-01-01',
+    shortDescription: 'Example',
+    requiredAction: 'Apply updates',
+    dueDate: '2024-02-01',
+    knownRansomwareCampaignUse: 'Unknown',
+  };
+}
 
 describe('normalizeSeverity', () => {
   it('prefers a numeric CVSS score over the severity bucket when present', () => {
@@ -38,6 +54,23 @@ describe('normalizeAssetCriticality', () => {
 
   it('defaults to the medium score when no tag is available', () => {
     expect(normalizeAssetCriticality(undefined)).toBe(0.5);
+  });
+});
+
+describe('isKevListed', () => {
+  it('returns true when the CVE id is present in the KEV index', () => {
+    const kevByCve = new Map([['CVE-2021-44228', kevEntry('CVE-2021-44228')]]);
+    expect(isKevListed('CVE-2021-44228', kevByCve)).toBe(true);
+  });
+
+  it('returns false when the CVE id is absent from the KEV index', () => {
+    const kevByCve = new Map([['CVE-2021-44228', kevEntry('CVE-2021-44228')]]);
+    expect(isKevListed('CVE-2020-1472', kevByCve)).toBe(false);
+  });
+
+  it('is case-insensitive on the CVE id', () => {
+    const kevByCve = new Map([['CVE-2021-44228', kevEntry('CVE-2021-44228')]]);
+    expect(isKevListed('cve-2021-44228', kevByCve)).toBe(true);
   });
 });
 
