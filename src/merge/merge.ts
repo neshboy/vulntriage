@@ -1,5 +1,5 @@
 import type { AssetCriticalityConfig, EpssEntry, KevEntry, ScannerFinding, ScoredFinding } from '../types.js';
-import { scoreFinding } from '../scoring/score.js';
+import { isKevListed, scoreFinding } from '../scoring/score.js';
 import { matchAssetCriticality } from './assets.js';
 
 export interface MergeInputs {
@@ -19,7 +19,7 @@ export function mergeAndScore(inputs: MergeInputs): ScoredFinding[] {
   return inputs.findings.map((finding) => {
     const key = finding.id.toUpperCase();
     const epssEntry = inputs.epssIndex.get(key);
-    const kevListed = inputs.kevIndex.has(key);
+    const kevListed = isKevListed(finding.id, inputs.kevIndex);
     const assetCriticality = inputs.assetConfig
       ? matchAssetCriticality(finding.target, inputs.assetConfig)
       : undefined;

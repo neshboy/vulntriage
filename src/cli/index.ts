@@ -47,7 +47,7 @@ export function buildProgram(version: string): Command {
     .option('--epss-file <path>', 'load EPSS scores from a local CSV snapshot instead of the live API')
     .option('--kev-file <path>', 'load the KEV catalog from a local JSON snapshot instead of the live feed')
     .option('-o, --output <mode>', 'output mode: text or json', 'text')
-    .option('--top <n>', 'only show the top N findings', (v) => Number.parseInt(v, 10));
+    .option('--top <n>', 'only show the top N findings');
   return program;
 }
 
@@ -89,12 +89,21 @@ export async function run(argv: readonly string[], io: CliIo = defaultIo): Promi
     epssFile?: string;
     kevFile?: string;
     output: string;
-    top?: number;
+    top?: string;
   }>();
 
   if (opts.output !== 'text' && opts.output !== 'json') {
     io.stderr(`Invalid --output "${opts.output}": expected "text" or "json"\n`);
     return 1;
+  }
+
+  let top: number | undefined;
+  if (opts.top !== undefined) {
+    if (!/^\d+$/.test(opts.top)) {
+      io.stderr(`Invalid --top "${opts.top}": expected a non-negative integer\n`);
+      return 1;
+    }
+    top = Number(opts.top);
   }
 
   try {
@@ -138,8 +147,8 @@ export async function run(argv: readonly string[], io: CliIo = defaultIo): Promi
     });
 
     let ranked = rankFindings(scored);
-    if (typeof opts.top === 'number' && Number.isFinite(opts.top) && opts.top >= 0) {
-      ranked = ranked.slice(0, opts.top);
+    if (top !== undefined) {
+      ranked = ranked.slice(0, top);
     }
 
     io.stdout(opts.output === 'json' ? `${formatJson(ranked)}\n` : formatText(ranked));

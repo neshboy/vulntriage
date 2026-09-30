@@ -124,6 +124,50 @@ describe('vulntriage CLI: end-to-end against real trimmed fixtures', () => {
     expect(parsed.findings).toHaveLength(2);
   });
 
+  it('rejects a non-numeric --top value instead of silently showing every finding', async () => {
+    const cap = captureIo();
+    const code = await run(
+      [
+        '--input',
+        fixturePath('trivy-report.json'),
+        '--format',
+        'trivy',
+        '--epss-file',
+        fixturePath('epss-snapshot.csv'),
+        '--kev-file',
+        fixturePath('kev-snapshot.json'),
+        '--top',
+        'abc',
+      ],
+      cap.io,
+    );
+
+    expect(code).toBe(1);
+    expect(cap.stderr()).toContain('Invalid --top');
+  });
+
+  it('rejects a negative --top value instead of silently showing every finding', async () => {
+    const cap = captureIo();
+    const code = await run(
+      [
+        '--input',
+        fixturePath('trivy-report.json'),
+        '--format',
+        'trivy',
+        '--epss-file',
+        fixturePath('epss-snapshot.csv'),
+        '--kev-file',
+        fixturePath('kev-snapshot.json'),
+        '--top',
+        '-1',
+      ],
+      cap.io,
+    );
+
+    expect(code).toBe(1);
+    expect(cap.stderr()).toContain('Invalid --top');
+  });
+
   it('exits non-zero with a message on stderr when the input file does not exist', async () => {
     const cap = captureIo();
     const code = await run(['--input', fixturePath('does-not-exist.json')], cap.io);
